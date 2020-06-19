@@ -1,11 +1,13 @@
-import argparse
+import math
+import operator
 
-def arguments():
-    parser= argparse.ArgumentParser(description='meh')
-    parser.add_argument('-t', '--task', type=int, required=True)
-    ret=parser.parse_args()
-
-if __name__ == '__main__':
-    args=arguments()
-    print(args.task)
-    # -t 6
+scores=[5,8,6,3,100]
+w=['abc','def','ghi','jkl','mno']
+p = sorted(enumerate(scores), key=operator.itemgetter(1), reverse=True)
+print(p)
+z = [(str(w[i]), y, p[0][1] - y) for i, y in p]
+print(z)
+result = [(w[index], value) for (index, value) in enumerate(scores)]
+print(result)
+p = max(result,  key=operator.itemgetter(1))
+print(p[0])

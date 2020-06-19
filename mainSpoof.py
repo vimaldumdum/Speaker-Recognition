@@ -1,18 +1,9 @@
-from readAudioFile import read_wav
 import os
-from os import system
+import argparse
+from readAudioFile import read_wav
+from interface import ModelInterface
 
-
-def helpFun():
-    print("This message will show how to use this project.")
-    msg="you can select from the following options: \n" \
-        "1. ENROLL \n" \
-        "   Enroll: Enter an audio file in the dataset. Enter '-e' without quotes to select this option.\n" \
-        "2. PREDICT\n" \
-        "   Predict: Enter an audio file and predict the result. Enter '-p' without quotes to select this option."
-    print(msg)
-
-def enroll():
+def task_enroll():
     train_sounds_path = os.path.join(os.getcwd(), "trainSounds")
     print('inside enroll fun')
 
@@ -26,10 +17,19 @@ def enroll():
             if ext == '.wav':
                 wavs.append(d)
 
-    print(wavs)
+    m= ModelInterface()
 
+    for w in wavs:
+        sample_rate, signal=read_wav(os.path.join(train_sounds_path,w))
+        label=os.path.splitext(w)[0]
+        m.enroll(label,sample_rate,signal)
+        print(label + ' enrolled')
 
-def predict():
+    m.train()
+    m.dump('data.bin')
+
+def task_predict():
+    m = ModelInterface.load('data.bin')
     predict_sound_path=os.path.join(os.getcwd(),'predictSounds')
     dirs = os.listdir(predict_sound_path)
     wavs=[]
@@ -40,17 +40,12 @@ def predict():
             ext = os.path.splitext(d)[-1].lower()
             if ext=='.wav':
                 wavs.append(d)
+    for w in wavs:
+        sample_rate, signal = read_wav(os.path.join(predict_sound_path, w))
+        label = os.path.splitext(w)[0]
+        label2, score=m.predict(sample_rate, signal)
+        print(label , '->',label2 ,'->' , score)
 
-
-if __name__ == '__main__':
-    x='y'
-    while x=='y' or x=='Y':
-        helpFun()
-        choice=input('Enter your choice: ')
-        if choice=='-e':
-            enroll()
-        elif choice=='-p':
-            predict()
-        else:
-            print('Invalid choice... Enter again(Y/N)')
-
+if __name__ == "__main__":
+    task_enroll()
+    task_predict()
