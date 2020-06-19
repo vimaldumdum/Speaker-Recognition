@@ -4,7 +4,7 @@ from interface import ModelInterface
 
 def task_enroll():
     train_sounds_path = os.path.join(os.getcwd(), "trainSounds")
-    print('inside enroll fun')
+   # print('inside enroll fun')
 
     dirs = os.listdir(train_sounds_path)
     wavs = []
