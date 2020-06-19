@@ -1,5 +1,4 @@
 import os
-import argparse
 from readAudioFile import read_wav
 from interface import ModelInterface
 
@@ -47,5 +46,20 @@ def task_predict():
         print(label , '->',label2 ,'->' , score)
 
 if __name__ == "__main__":
-    task_enroll()
-    task_predict()
+    choice = 'y'
+    while choice == 'y' :
+        task=input('Enter the task... \n'
+                   '1. Enroll: enroll the wav files in the trainSounds directory.\n'
+                   '2. Predict: Recognize the speaker of the wav files in predict sounds directory\n'
+                   'Enter "enroll" to enroll and "predict" to predict.\n')
+
+        if task == 'enroll' :
+            task_enroll()
+            choice= input('Do you want to continue using? (y/n)')
+        elif task == 'predict' :
+            task_predict()
+            choice = input('Do you want to continue using? (y/n)')
+        else :
+            print('Invalid choice... Enter again...')
+            continue
+
